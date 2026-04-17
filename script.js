@@ -1,29 +1,34 @@
-let timer;
-let seconds = 0;
+const TICK_INTERVAL_MS = 1000;
+let timerId = null;
+let elapsedSeconds = 0;
 
-function updateDisplay() {
+function formatTime(seconds) {
   const hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
   const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
   const secs = String(seconds % 60).padStart(2, '0');
-  document.getElementById("display").textContent = `${hrs}:${mins}:${secs}`;
+  return `${hrs}:${mins}:${secs}`;
+}
+
+function updateDisplay() {
+  document.getElementById("display").textContent = formatTime(elapsedSeconds);
 }
 
 function start() {
-  if (!timer) {
-    timer = setInterval(() => {
-      seconds++;
+  if (!timerId) {
+    timerId = setInterval(() => {
+      elapsedSeconds++;
       updateDisplay();
-    }, 1000);
+    }, TICK_INTERVAL_MS);
   }
 }
 
 function stop() {
-  clearInterval(timer);
-  timer = null;
+  clearInterval(timerId);
+  timerId = null;
 }
 
 function reset() {
   stop();
-  seconds = 0;
+  elapsedSeconds = 0;
   updateDisplay();
 }
